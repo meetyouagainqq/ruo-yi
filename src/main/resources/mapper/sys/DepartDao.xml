@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.sys.dao.DepartDao">
+    <resultMap id="DeptMap" type="com.javasm.sys.entity.SysDepart">
+        <result property="departId" column="depart_id" jdbcType="VARCHAR"/>
+        <result property="departName" column="depart_name" jdbcType="VARCHAR"/>
+        <result property="showOrder" column="show_order" jdbcType="VARCHAR"/>
+        <result property="departState" column="depart_state" jdbcType="VARCHAR"/>
+        <result property="pid" column="pid" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="basicQuery">
+        select departId,
+               departName,
+               showOrder,
+               departState,
+               pid,
+               uid,
+               createTime,
+               updateTime,
+        from sys_depart
+    </sql>
+    <select id="getDeptId" resultMap="DeptMap">
+        <include refid="basicQuery"></include>
+        where depart_id=#{departId}
+    </select>
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.sys.dao.UserDao">
+    <sql id="allField">
+        user_id, user_account, user_name, user_password, user_gender, user_phone, user_email, user_state, remark, pos_id, depart_id, role_id, create_time, update_time
+    </sql>
+    <sql id="allQuery">
+        select <include refid="allField"></include>
+        from sys_user
+    </sql>
+
+    <resultMap id="user" type="com.javasm.sys.entity.User">
+        <id column="user_id" property="userId"></id>
+        <result column="user_account" property="userAccount"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="user_password" property="userPassword"></result>
+        <result column="user_account" property="userAccount"></result>
+        <result column="user_gender" property="userGender"></result>
+        <result column="user_phone" property="userPhone"></result>
+        <result column="user_email" property="userEmail"></result>
+        <result column="user_state" property="userState"></result>
+        <result column="remark" property="remark"></result>
+        <result column="pos_id" property="posId"></result>
+        <result column="depart_id" property="departId"></result>
+        <result column="role_id" property="roleId"></result>
+        <result column="depart_name" property="deptName"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+    </resultMap>
+    <select id="getUserByAccount" resultMap="user">
+        <include refid="allQuery"></include>
+        where user_account = #{userAccount} and user_password = #{userPassword}
+    </select>
+    <resultMap id="dept" type="com.javasm.sys.entity.SysDepart">
+        <id column="depart_id" property="departId"></id>
+        <result column="depart_name" property="departName"></result>
+        <result column="pid" property="pid"></result>
+    </resultMap>
+    <select id="getAllDept" resultMap="dept">
+       SELECT depart_id, depart_name, pid from sys_depart
+    </select>
+    <resultMap id="queryUser" type="com.javasm.sys.entity.User">
+        <id column="user_id" property="userId"></id>
+        <result column="user_account" property="userAccount"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="user_account" property="userAccount"></result>
+        <result column="user_gender" property="userGender"></result>
+        <result column="user_phone" property="userPhone"></result>
+        <result column="user_email" property="userEmail"></result>
+        <result column="user_state" property="userState"></result>
+        <result column="remark" property="remark"></result>
+        <result column="pos_id" property="posId"></result>
+        <result column="depart_id" property="departId"></result>
+        <result column="role_id" property="roleId"></result>
+        <result column="depart_name" property="deptName"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+    </resultMap>
+    <select id="getUsers" resultMap="queryUser">
+        SELECT u.*, d.depart_name
+        FROM sys_user as u LEFT JOIN sys_depart as d on u.depart_id = d.depart_id
+        <where>
+            <if test="userName != null and userName != ''">
+                 and u.user_name like concat("%", #{userName}, "%")
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                and u.user_phone like concat("%", #{userPhone}, "%")
+            </if>
+            <if test="userState != null and userState != ''">
+                and u.userState = #{userState}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and u.create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+        order by u.create_time desc
+    </select>
+</mapper>

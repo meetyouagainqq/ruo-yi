@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="corsFilter" class="org.springframework.web.filter.CorsFilter">
+        <constructor-arg name="configSource">
+            <bean class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+                <property name="corsConfigurations">
+                    <map>
+                        <entry key="/**">
+                            <bean class="org.springframework.web.cors.CorsConfiguration">
+                                <property name="allowedOrigins" value="http://localhost:8088"></property>
+                                <property name="allowCredentials" value="true"></property>
+                                <property name="allowedHeaders" value="*"></property>
+                                <property name="allowedMethods">
+                                    <list>
+                                        <value>GET</value>
+                                        <value>POST</value>
+                                        <value>PUT</value>
+                                        <value>DELETE</value>
+                                        <value>OPTIONS</value>
+                                    </list>
+                                </property>
+                                <property name="maxAge" value="18000"></property>
+                            </bean>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+</beans>

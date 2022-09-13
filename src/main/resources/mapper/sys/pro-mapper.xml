@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--岗位管理-->
+
+<mapper namespace="com.javasm.sys.dao.ProDao">
+    <resultMap id="posMap" type="com.javasm.sys.entity.SysPos">
+        <result property="posId" column="pos_id"></result>
+        <result property="posCode" column="pos_code"></result>
+        <result property="posName" column="pos_name"></result>
+        <result property="posState" column="pos_state"></result>
+        <result property="remark" column="remark"></result>
+        <result property="pid" column="pid"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+    </resultMap>
+
+    <sql id="baseQuery">
+        select pos_id,pos_code,pos_name,pos_state,remark from sys_pos
+    </sql>
+
+    <select id="getList" resultMap="posMap">
+        <include refid="baseQuery"></include>
+        <where>
+            <if test="pos_id !=null and pos_id !=''">
+                and pos_id=#{posId}
+            </if>
+            <if test="pos_code !=null and pos_code !=''">
+                and pos_code=#{posCode}
+            </if>
+            <if test="pos_name !=null and pos_name !=''">
+                and pos_name=#{posName}
+            </if>
+            <if test="pos_state !=null and pos_state !=''">
+                and pos_state=#{posState}
+            </if>
+            <if test="remark !=null and remark !=''">
+                and remark=#{remark}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getListByPosCode" resultMap="posMap">
+        <include refid="baseQuery"></include>
+        where pos_code like concat('%',#{posCode},'%')
+    </select>
+
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"></context:property-placeholder>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="minIdle" value="${redis.pool.minIdle}"></property>
+        <property name="maxIdle" value="${redis.pool.maxIdle}"></property>
+        <property name="maxTotal" value="${redis.pool.maxTotal}"></property>
+    </bean>
+
+    <bean class="redis.clients.jedis.JedisPool" id="jedisPool">
+        <constructor-arg index="0" ref="poolConfig"></constructor-arg>
+        <constructor-arg index="1" value="${redis.host}"></constructor-arg>
+        <constructor-arg index="2" value="${redis.port}"></constructor-arg>
+        <constructor-arg index="3" value="${redis.timeout}"></constructor-arg>
+        <constructor-arg index="4" value="${redis.password}"></constructor-arg>
+    </bean>
+</beans>

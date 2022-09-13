@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javasm.sys.dao.DicDataDao">
+
+    <resultMap id="dataMap" type="com.javasm.sys.entity.SysDicData">
+        <id column="dic_data_id" property="dicDataId"></id>
+        <id column="dic_data_label" property="dicDataLabel"></id>
+        <id column="dic_data_val" property="dicDataVal"></id>
+        <id column="show_order" property="showOrder"></id>
+        <id column="dic_data_state" property="dicDataState"></id>
+        <id column="remark" property="remark"></id>
+        <id column="echo_style" property="echoStyle"></id>
+        <id column="style_property" property="styleProperty"></id>
+        <id column="sys_default" property="sysDefault"></id>
+        <id column="dic_type" property="dicType"></id>
+        <id column="create_time" property="createTime"></id>
+        <id column="update_time" property="updateTime"></id>
+    </resultMap>
+
+    <sql id="allData">
+       SELECT dic_data_id, dic_data_label, dic_data_val, show_order,
+       dic_data_state, remark, echo_style, style_property,
+       sys_default, dic_type, create_time, update_time
+       FROM sys_dic_data
+    </sql>
+
+    <sql id="data">
+       dic_data_label, dic_data_val, show_order,
+       dic_data_state, remark, echo_style, style_property,
+       sys_default, dic_type
+    </sql>
+    <insert id="insertAll">
+        insert into sys_dic_data(<include refid="data"></include>)
+        values (#{dicDataLabel},#{dicDataVal},#{showOrder},#{dicDataState},#{remark},#{echoStyle}, #{styleProperty},
+        #{sysDefault},#{dicType})
+    </insert>
+
+    <update id="update">
+        update sys_dic_data
+        <set>
+            <if test="dicDataLabel!=null and dicDataLabel!=''">
+                dic_data_label = #{dicDataLabel}
+            </if>
+            <if test="dicDataVal!=null and dicDataVal!=''">
+                dic_dataVal = #{dicDataVal}
+            </if>
+            <if test="showOrder!=null and showOrder!=''">
+                show_order = #{showOrder}
+            </if>
+            <if test="dicDataState!=null and dicDataState!=''">
+                dic_data_state = #{dicDataState}
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark = #{remark}
+            </if>
+            <if test="echoStyle!=null and echoStyle!=''">
+                echo_style = #{echoStyle}
+            </if>
+            <if test="styleProperty!=null and styleProperty!=''">
+                style_property = #{styleProperty}
+            </if>
+            <if test="sysDefault!=null and sysDefault!=''">
+                sys_default = #{sysDefault}
+            </if>
+            <if test="dicType!=null and dicType!=''">
+                dic_type = #{dicType}
+            </if>
+        </set>
+
+        where dic_data_id = #{dicDataId}
+
+    </update>
+    <delete id="delete">
+        delete from sys_dic_data where dic_data_id in
+        <foreach collection="array" open="(" close=")" separator="," item="i">
+            #{i}
+        </foreach>
+    </delete>
+
+
+    <select id="getList" resultMap="dataMap">
+        <include refid="allData"></include>
+        <where>
+            <if test="dicType!=null and dicType!=''">
+                and dic_type = #{dicType}
+            </if>
+            <if test="dicDataLabel!=null and dicDataLabel!=''">
+                and dic_data_label like concat('%',#{dicDataLabel},'%')
+            </if>
+            <if test="dicDataState!=null and dicDataState!=''">
+                and dic_data_state = #{dicDataState}
+            </if>
+        </where>
+        order by show_order asc
+    </select>
+</mapper>
